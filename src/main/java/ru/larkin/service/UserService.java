@@ -111,4 +111,113 @@ public class UserService {
                 .userType(UserType.STUDENT)
                 .build();
     }
+
+//    private static final int MIN_BIRTH_YEAR = 1900;
+//    private static final int MAX_BIRTH_YEAR = Year.now().getValue();
+//
+//    private final UserRepository userRepository;
+//
+//    public UserRegistrationService(UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
+//
+//    public void registerUser() {
+//        System.out.println("Регистрируем пользователя: ");
+//
+//        String userId = UUID.randomUUID().toString().substring(0, 6);
+//
+//        String name  = prompt("Введите имя пользователя: ",
+//                s -> !s.isBlank(),
+//                "Имя пользователя не может быть пустым");
+//
+//        String email = prompt("Введите email пользователя: ",
+//                s -> !s.isBlank() && isEmail(s),
+//                "Укажите корректный email (например, user@example.com)");
+//
+//        int year     = promptInt("Введите год рождения: ",
+//                y -> y >= MIN_BIRTH_YEAR && y <= MAX_BIRTH_YEAR,
+//                "Год рождения должен быть в диапазоне %d–%d".formatted(MIN_BIRTH_YEAR, MAX_BIRTH_YEAR));
+//
+//        UserType userType = promptEnum(
+//                "Введите тип пользователя (STUDENT, FACULTY, GUEST): ",
+//                UserType.class,
+//                "Неверный тип. Возможные варианты: STUDENT, FACULTY, GUEST");
+//
+//        UserData data = new UserData(userId, name, email, year, userType);
+//
+//        User newUser = FACTORY.getOrDefault(userType, __ -> {
+//            throw new NoSuchElementException("Тип пользователя %s не поддержан".formatted(userType));
+//        }).apply(data);
+//
+//        userRepository.addUser(newUser);
+//        System.out.printf("Пользователь с id %s успешно создан.%n", userId);
+//    }
+//
+//    // ---- Фабрика по типу пользователя ----
+//
+//    private static final Map<UserType, Function<UserData, User>> FACTORY = Map.of(
+//        UserType.STUDENT, d -> Student.builder()
+//                .userId(d.userId()).name(d.name()).email(d.email())
+//                .birthYear(d.birthYear()).userType(UserType.STUDENT).build(),
+//        UserType.FACULTY, d -> Faculty.builder()
+//                .userId(d.userId()).name(d.name()).email(d.email())
+//                .birthYear(d.birthYear()).userType(UserType.FACULTY).build(),
+//        UserType.GUEST,   d -> Guest.builder()
+//                .userId(d.userId()).name(d.name()).email(d.email())
+//                .birthYear(d.birthYear()).userType(UserType.GUEST).build()
+//    );
+//
+//    // ---- Хелперы ввода ----
+//
+//    private static String prompt(String label,
+//                                 java.util.function.Predicate<String> ok,
+//                                 String errMsg) {
+//        return InputUtilService.getInput(label, ok, errMsg);
+//    }
+//
+//    private static int promptInt(String label,
+//                                 java.util.function.IntPredicate ok,
+//                                 String errMsg) {
+//        return Integer.parseInt(InputUtilService.getInput(label, s -> {
+//            try {
+//                int v = Integer.parseInt(s);
+//                return ok.test(v);
+//            } catch (NumberFormatException e) {
+//                return false;
+//            }
+//        }, errMsg));
+//    }
+//
+//    private static <E extends Enum<E>> E promptEnum(String label,
+//                                                    Class<E> enumType,
+//                                                    String errMsg) {
+//        String raw = InputUtilService.getInput(label, s -> {
+//            try { Enum.valueOf(enumType, s.trim().toUpperCase()); return true; }
+//            catch (IllegalArgumentException e) { return false; }
+//        }, errMsg);
+//        return Enum.valueOf(enumType, raw.trim().toUpperCase());
+//    }
+//
+//    private static boolean isEmail(String s) {
+//        // Простая проверка. Если нужен строгий формат — используй Apache Commons Validator.
+//        return s.contains("@") && s.indexOf('@') > 0 && s.indexOf('@') < s.length() - 1;
+//    }
+//
+//    // переносим «общий набор полей» в компактный контейнер
+//    private record UserData(String userId, String name, String email, int birthYear, UserType type) {}
+//}
+//Что улучшили
+//❌ Убрали три почти одинаковых метода createStudent/Faculty/Guest.
+//
+//✅ Единый фабричный Map — легко добавить новый UserType.
+//
+//✅ Единые, переиспользуемые хелперы для ввода чисел и enum.
+//
+//✅ Корректные границы года (автоматически учитывают текущий год).
+//
+//✅ Консистентные тексты ошибок.
+//
+//🧩 Если используешь Lombok @SuperBuilder в иерархии User → Student/Faculty/Guest, этот код продолжит работать без изменений.
+//
+//Микро-совет: вместо UUID.substring(0,6) лучше использовать короткий, но читабельный генератор (например, NanoID) — меньше коллизий при массовом создании.
 }
