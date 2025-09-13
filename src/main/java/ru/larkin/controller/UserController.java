@@ -11,9 +11,9 @@ import java.util.Scanner;
 public class UserController {
 
     private final UserService userService;
+    private final Scanner scanner;
     
     public void userManagement() {
-        Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
         while (isRunning) {
@@ -23,7 +23,9 @@ public class UserController {
             String userMenu = """
                     1. Добавить пользователя
                     2. Список всех пользователей
-                    3. Поиск по критериям
+                    3. Поиск по ID
+                    4. Поиск по критериям
+                    5. Удалить пользователя
                     0. Назад
                     Выберите действие:
                     """;
@@ -37,8 +39,9 @@ public class UserController {
                     }
                     case "1" -> userService.registerUser();
                     case "2" -> userService.getAllUsers();
-                    case "3" -> userService.findUsersByCriteria();
-                    case "4" -> userService.removeUser();
+                    case "3" -> userService.getUserById();
+                    case "4" -> userService.getUsersByCriteria();
+                    case "5" -> userService.removeUser();
                     default -> throw new InvalidInputException("Неверный ввод. Попробуйте еще раз.");
                 }
             } catch (LibraryException e) {

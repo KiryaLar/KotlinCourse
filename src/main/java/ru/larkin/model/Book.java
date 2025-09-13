@@ -1,12 +1,14 @@
 package ru.larkin.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Book {
 
     private String id;
@@ -16,4 +18,12 @@ public class Book {
     private String genre;
     private BookStatus status;
     private LocalDateTime borrowedAt;
+
+    @Override
+    public String toString() {
+        return id + " '" + title + '\'' +
+               ", автор='" + author + '\'' +
+               ", год выпуска=" + year +
+               ", жанр='" + genre + '\'';
+    }
 }

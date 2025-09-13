@@ -1,21 +1,19 @@
 package ru.larkin.controller;
 
+import lombok.RequiredArgsConstructor;
 import ru.larkin.exception.InvalidInputException;
 import ru.larkin.exception.LibraryException;
 import ru.larkin.service.OperationService;
 
 import java.util.Scanner;
 
+@RequiredArgsConstructor
 public class OperationController {
 
     private final OperationService operationService;
-
-    public OperationController(OperationService operationService) {
-        this.operationService = operationService;
-    }
+    private final Scanner scanner;
 
     public void operationManagement() {
-        Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
         while (isRunning) {
@@ -23,9 +21,9 @@ public class OperationController {
             System.out.println("         ОПЕРАЦИИ         ");
             System.out.println("--------------------------");
             String bookMenu = """
-                    1. Добавить книгу
-                    2. Список всех книг
-                    3. Поиск по критериям
+                    1. Взять книгу
+                    2. Вернуть книгу
+                    3. Отследить просроченные книги
                     0. Назад
                     Выберите действие:
                     """;
@@ -37,10 +35,9 @@ public class OperationController {
                         System.out.println("Выход в главное меню...");
                         isRunning = false;
                     }
-                    case "1" -> bookService.addBook();
-                    case "2" -> bookService.getAllBooks();
-                    case "3" -> bookService.findBookByCriteria();
-                    case "4" -> bookService.borrowBook();
+                    case "1" -> operationService.borrowBook();
+                    case "2" -> operationService.returnBook();
+                    case "3" -> operationService.getOverdueBooks();
                     default -> throw new InvalidInputException("Неверный ввод. Попробуйте еще раз.");
                 }
             } catch (LibraryException e) {

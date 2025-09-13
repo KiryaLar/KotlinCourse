@@ -1,7 +1,9 @@
-package ru.larkin.service;
+package ru.larkin.util;
 
 import lombok.experimental.UtilityClass;
+import ru.larkin.exception.InvalidInputException;
 import ru.larkin.model.BookStatus;
+import ru.larkin.model.UserType;
 
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -44,6 +46,30 @@ public class InputUtilService {
                 return input;
             }
             System.out.println(errorMessage);
+        }
+    }
+
+    public static UserType getInputUserType() {
+        String type = InputUtilService.getInput("Введите тип пользователя (STUDENT, FACULTY, GUEST): ",
+                input -> input.equalsIgnoreCase("STUDENT") ||
+                     input.equalsIgnoreCase("FACULTY") ||
+                     input.equalsIgnoreCase("GUEST"),
+                "Неправильный ввод типа пользователя, возможные варианты: STUDENT, FACULTY, GUEST");
+        return UserType.valueOf(type.toUpperCase());
+    }
+
+    public static Integer getIntInputWithLimit(int size) {
+        while (true) {
+            String input = scanner.nextLine();
+            try {
+                int number = Integer.parseInt(input);
+                if (number <= 0 && number > size) {
+                    throw new InvalidInputException("Выбор не в пределах доступных книг");
+                }
+                return number;
+            } catch (NumberFormatException | InvalidInputException e) {
+                System.out.println("Некорректный ввод. Введите число в пределах количества доступных книг");
+            }
         }
     }
 }

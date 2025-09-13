@@ -1,9 +1,11 @@
 package ru.larkin.service;
 
 import lombok.RequiredArgsConstructor;
+import ru.larkin.exception.NotFoundException;
 import ru.larkin.model.Book;
 import ru.larkin.model.BookStatus;
 import ru.larkin.repository.BookRepository;
+import ru.larkin.util.InputUtilService;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +15,7 @@ import java.util.Scanner;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
 
     public void addBook() {
         System.out.println("Добавляем книгу: ");
@@ -64,12 +66,12 @@ public class BookService {
         } else {
             int counter = 1;
             for (Book book : books) {
-                System.out.println(counter++ + ". " + book);
+                System.out.println(counter++ + ") " + book);
             }
         }
     }
 
-    public void findBookById() {
+    public void getBookById() {
         System.out.println("Поиск книги по ID");
 
         System.out.println("Введите ID книги: ");
@@ -79,11 +81,11 @@ public class BookService {
             System.out.println("Найденная книга: ");
             System.out.println(maybeBook.get());
         } else {
-            System.out.printf("Книга с id %s не найдена", bookId);
+            throw  NotFoundException.book(bookId);
         }
     }
 
-    public void findBooksByCriteria() {
+    public void getBooksByCriteria() {
         System.out.println("Поиск книг по критериям");
 
         System.out.println("Введите критерии поиска: ");
@@ -113,7 +115,7 @@ public class BookService {
         System.out.println("Введите ID книги: ");
         String bookId = scanner.nextLine();
         bookRepository.removeBookById(bookId);
-        System.out.printf("Книга с id %s успешно удалена", bookId);
+        System.out.printf("Книга с ID %s успешно удалена", bookId);
     }
 
     

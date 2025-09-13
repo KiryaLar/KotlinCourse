@@ -1,21 +1,19 @@
 package ru.larkin.controller;
 
+import lombok.RequiredArgsConstructor;
 import ru.larkin.exception.InvalidInputException;
 import ru.larkin.exception.LibraryException;
 import ru.larkin.service.BookService;
 
 import java.util.Scanner;
 
+@RequiredArgsConstructor
 public class BookController {
 
     private final BookService bookService;
-
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
+    private final Scanner scanner;
 
     public void bookManagement() {
-        Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
         while (isRunning) {
@@ -25,8 +23,9 @@ public class BookController {
             String bookMenu = """
                     1. Добавить книгу
                     2. Список всех книг
-                    3. Поиск по критериям
-                    4. Удалить книгу
+                    3. Поиск по ID
+                    4. Поиск по критериям
+                    5. Удалить книгу
                     0. Назад
                     Выберите действие:
                     """;
@@ -40,8 +39,9 @@ public class BookController {
                     }
                     case "1" -> bookService.addBook();
                     case "2" -> bookService.getAllBooks();
-                    case "3" -> bookService.findBooksByCriteria();
-                    case "4" -> bookService.removeBook();
+                    case "3" -> bookService.getBookById();
+                    case "4" -> bookService.getBooksByCriteria();
+                    case "5" -> bookService.removeBook();
                     default -> throw new InvalidInputException("Неверный ввод. Попробуйте еще раз.");
                 }
             } catch (LibraryException e) {

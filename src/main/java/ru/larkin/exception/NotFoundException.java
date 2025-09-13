@@ -11,4 +11,7 @@ public class NotFoundException extends LibraryException{
     }
 
 
+    public static NotFoundException user(String userId) {
+        return new NotFoundException("User with id " + userId + " not found");
+    }
 }

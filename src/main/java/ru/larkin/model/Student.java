@@ -20,3 +20,4 @@ public class Student extends User {
         return 50;
     }
 }
+
